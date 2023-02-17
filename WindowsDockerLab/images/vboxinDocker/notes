@@ -1,0 +1,12 @@
+# Descargar la version de extpack
+wget https://download.virtualbox.org/virtualbox/7.0.4/Oracle_VM_VirtualBox_Extension_Pack-7.0.4.vbox-extpack
+
+# Instalar
+vboxmanage extpack install --replace Oracle_VM_VirtualBox_Extension_Pack-7.0.4.vbox-extpack
+
+# Start
+vboxheadless --startvm windows-server --vrde on
+
+# Run docker
+sudo docker run -it --rm --privileged -v "/dev/vboxdrv:/dev/vboxdrv" -v "vbox:/home/vms" -v "$(pwd):/home/iso" -v "/var/run/docker.sock:/var/run/docker.sock" -p 8081:10001 -p 22:22 local:kaliBox
+

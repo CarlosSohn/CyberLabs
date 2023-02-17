@@ -1,0 +1,32 @@
+# Start Daemon
+/etc/init.d/virtualbox start
+
+# Create VM
+	vboxmanage createvm --name windows-server --ostype "Windows2012_64" --register --basefolder "/home"
+
+# Set memory and network
+	vboxmanage modifyvm windows-server --ioapic on
+	vboxmanage modifyvm windows-server --memory 2048 --vram 128
+	vboxmanage modifyvm windows-server --nic1 nat
+
+# Create de Disk
+	vboxmanage createhd --filename ./windows-server/winserver.vdi --size 20000 --format VDI
+Size in Mb. In this case, 20GB disk size. 
+
+# Create slot
+	vboxmanage storagectl windows-server --name "SATA Controller" --add sata --controller IntelAhci
+
+# Attach disc to slot
+	VBoxManage storageattach windows-server --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium  windows-server/winserver.vdi
+
+# Create slot for iso image
+	VBoxManage storagectl windows-server --name "IDE Controller" --add ide --controller PIIX4
+# Add iso to slto
+	VBoxManage storageattach windows-server --storagectl "IDE Controller" --port 1 --device 0 --type dvddrive --medium WinServer2012.iso
+
+# Boot from iso, then from Disk
+	VBoxManage modifyvm windows-server --boot1 dvd --boot2 disk --boot3 none --boot4 none
+
+# Add RDP conection from port 10001
+	VBoxManage modifyvm windows-server --vrde on
+	VBoxManage modifyvm windows-server --vrdemulticon on --vrdeport 10001

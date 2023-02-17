@@ -1,0 +1,4 @@
+https://learn.microsoft.com/es-es/virtualization/windowscontainers/manage-containers/manage-serviceaccounts
+
+AD in docker containers
+https://github.com/plooploops/windows-containers-AD
